@@ -1,13 +1,7 @@
 ﻿namespace Interpreter.mappers;
 
-public class Var
+public class Var(string nome, dynamic value)
 {
-    public string? Nome {get; set;}
-    public dynamic Value { get; set; }
-
-    public Var(string nome, dynamic value)
-    {
-        Nome = nome;
-        Value = value;
-    }
+    public string? Nome {get; set;} = nome;
+    public dynamic Value { get; set; } = value;
 }

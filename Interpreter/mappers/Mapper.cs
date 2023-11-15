@@ -2,11 +2,8 @@
 
 namespace Interpreter.mappers;
 
-public class Mapper
+public class Mapper()
 {
-    public Mapper()
-    {
-    }
 
     public void Print(string line, int lineCount, ref List<Var?> varList)
     {

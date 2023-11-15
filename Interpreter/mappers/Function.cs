@@ -1,14 +1,10 @@
 ﻿namespace Interpreter.mappers;
 
-public class Function
+public class Function(string nome)
 {
-    private readonly List<string> _listOfMembers;
-    public string Nome { get;}
-    public Function(string nome)
-    {
-        Nome = nome;
-        _listOfMembers = new List<string>();
-    }
+    private List<string> _listOfMembers = new();
+    public string Nome { get;} = nome;
+
 
     public void Add(string member)
     {
