@@ -73,11 +73,11 @@ while (!sr.EndOfStream)
         nameFunc = "";
         lineCount++;
     }
-    else if (line != null && var!= null && Regex.IsMatch(line, var) | Regex.IsMatch(line,stringVar ))
+    else if (line.Contains("="))
     {
         if(nameFunc != ""){
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
-            funcs?.Add(line);
+            funcs?.Add(line.Trim());
             line = sr.ReadLine();
             lineCount++;
             continue;

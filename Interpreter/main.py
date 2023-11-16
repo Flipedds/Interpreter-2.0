@@ -6,7 +6,11 @@ valorDois = 3
 print(valorUm/valorDois)
 
 def soma():
-    print(1+2)
+    valorTres = 4
+    valorQuatro = 4
+    msg = "oi"
+    print(msg)
+    print(valorTres*valorQuatro)
 
 
 def recursao():
