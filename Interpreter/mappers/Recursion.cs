@@ -7,8 +7,7 @@ public class Recursion
     public void DefRecursion(Function func, List<Function?> list, int lineCount, ref List<Var?> varList)
     {
         List<string> iterList = func.MyList;
-        string? var = new Patterns().Var;
-        string? stringVar = new Patterns().StringVar;
+        Patterns patterns = new();
         foreach (var item in iterList)
         {
             if (item.Contains("print"))
@@ -16,7 +15,7 @@ public class Recursion
                 Mapper map = new();
                 map.Print(item, lineCount, ref varList, func);
             }
-            else if (item != null && Regex.IsMatch(item, var) | Regex.IsMatch(item, stringVar))
+            else if (item != null && Regex.IsMatch(item, patterns.Var) | Regex.IsMatch(item, patterns.StringVar))
             {
                 Mapper map = new();
                 string name = map.VarName(item);
@@ -32,7 +31,7 @@ public class Recursion
                 Var newVariable = new(name, value);
                 func.NewVar(newVariable);
             }
-            else if (item.Contains("()"))
+            else if (item != null && item.Contains("()"))
             {
                 var itemName = item.Split("(");
                 var nome = itemName[0].Trim();

@@ -13,8 +13,7 @@ while (!sr.EndOfStream)
 {
     Patterns patterns = new();
 
-    if (line != null && patterns.PrintNumber != null
-    && patterns.Print != null && patterns.PrintVar != null
+    if (line != null
     && Regex.IsMatch(line, patterns.Print)
     | Regex.IsMatch(line, patterns.PrintNumber)
     | Regex.IsMatch(line, patterns.PrintVar))
@@ -33,7 +32,6 @@ while (!sr.EndOfStream)
         lineCount++;
     }
     else if (line != null
-    && patterns.Def != null
     && Regex.IsMatch(line, patterns.Def))
     {
         Mapper map = new();
@@ -44,7 +42,6 @@ while (!sr.EndOfStream)
         lineCount++;
     }
     else if (line != null
-    && patterns.ExecDef != null
     && Regex.IsMatch(line, patterns.ExecDef))
     {
         if (nameFunc != "")
