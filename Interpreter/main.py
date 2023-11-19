@@ -29,4 +29,5 @@ def teste():
 
 teste()
 soma()
+soma()
 

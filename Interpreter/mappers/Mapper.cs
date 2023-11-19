@@ -5,15 +5,15 @@ namespace Interpreter.mappers;
 public class Mapper()
 {
 
-    public void Print(string line, int lineCount, ref List<Var?> varList, Function func = null)
+    public void Print(string line, int lineCount, ref List<Var?> varList, Function? func = null)
     {
         var tokens = line.Split("(");
 
         string ReplaceA(string str) => str.Replace(")", "");
         string ReplaceC(string str) => str.Trim();
 
-        tokens = tokens.Select((Func<string, string>)ReplaceA).ToArray();
-        tokens = tokens.Select((Func<string, string>)ReplaceC).ToArray();
+        tokens = tokens.Select(ReplaceA).ToArray();
+        tokens = tokens.Select(ReplaceC).ToArray();
 
         switch (tokens)
         {
@@ -103,32 +103,88 @@ public class Mapper()
         }
     }
 
-    public (Var, Var) PrintFind(string[] partes, int lineCount, ref List<Var?> varList, Function func = null)
+    public (Var?, Var?) PrintFind(string[] partes, int lineCount, ref List<Var?> varList, Function? func = null)
     {
         Var? varUm = varList.Find(obj => obj?.Nome == partes[0]);
         Var? vardois = varList.Find(obj => obj?.Nome == partes[1]);
-        if (varUm == null | vardois == null)
+
+        if (varUm == null && vardois != null)
         {
             if (func != null)
             {
                 varUm = func.MyVars.Find(obj => obj?.Nome == partes[0]);
-                vardois = func.MyVars.Find(obj => obj?.Nome == partes[1]);
 
-                if (varUm == null | vardois == null)
+                if (varUm == null)
                 {
                     Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
-                              $"Variáveis {partes[0]} ou {partes[1]} não encontradas !");
+                              $"Variável {partes[0]} não encontrada !");
                     Environment.Exit(0);
                 }
             }
             else
             {
                 Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
-                              $"Variáveis {partes[0]} ou {partes[1]} não encontradas !");
+                              $"Variável {partes[0]} não encontradas !");
                 Environment.Exit(0);
             }
 
         }
+        else if (varUm != null && vardois == null)
+        {
+            if (func != null)
+            {
+                vardois = func.MyVars.Find(obj => obj?.Nome == partes[1]);
+
+                if (vardois == null)
+                {
+                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                              $"Variável {partes[1]} não encontrada !");
+                    Environment.Exit(0);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                              $"Variável {partes[1]} não encontradas !");
+                Environment.Exit(0);
+            }
+
+        }
+        else if (varUm == null && vardois == null)
+        {
+            if (func != null)
+            {
+                varUm = func.MyVars.Find(obj => obj?.Nome == partes[0]);
+                vardois = func.MyVars.Find(obj => obj?.Nome == partes[1]);
+
+                if (varUm == null)
+                {
+                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                              $"Variável {partes[0]} não encontrada !");
+                    Environment.Exit(0);
+                }
+                else if (vardois == null)
+                {
+                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                              $"Variável {partes[1]} não encontrada !");
+                    Environment.Exit(0);
+                }
+                else if (varUm == null && vardois == null)
+                {
+                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                              $"Variáveis {partes[0]} {partes[1]} não encontradas !");
+                    Environment.Exit(0);
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                              $"Variáveis {partes[0]} {partes[1]} não encontradas !");
+                Environment.Exit(0);
+            }
+
+        }
+
 
         if (varUm?.Value.GetType() == typeof(int) && vardois?.Value.GetType() == typeof(string) || varUm?.Value.GetType() == typeof(string) && vardois?.Value.GetType() == typeof(int))
         {
@@ -145,9 +201,7 @@ public class Mapper()
         var tokens = line.Split(" ");
 
         var name = tokens[1];
-        name = name.Replace(")", "");
-        name = name.Replace("(", "");
-        name = name.Replace(":", "");
+        name = name.Replace(")", "").Replace("(", "").Replace(":", "");
         return name;
     }
 
@@ -155,8 +209,6 @@ public class Mapper()
     {
         var tokens = line.Split("=");
         var name = tokens[0].Trim();
-
-
         return name;
     }
 
@@ -165,12 +217,10 @@ public class Mapper()
         var tokens = line.Split("=");
         if (line.Contains('\"'))
         {
-            tokens[1] = tokens[1].Replace("\"", "");
-            tokens[1] = tokens[1].Trim();
+            tokens[1] = tokens[1].Replace("\"", "").Trim();
             return tokens[1];
         }
-        tokens[1] = tokens[1].Trim();
-        int value = int.Parse(tokens[1]);
+        int value = int.Parse(tokens[1].Trim());
 
         return value;
     }
