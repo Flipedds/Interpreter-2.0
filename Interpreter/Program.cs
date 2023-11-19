@@ -1,25 +1,23 @@
 ﻿using System.Text.RegularExpressions;
 using Interpreter.mappers;
 
-StreamReader sr = new ("C:\\Users\\felip\\RiderProjects\\Interpreter\\Interpreter\\main.py");
+StreamReader sr = new("C:\\Users\\felip\\RiderProjects\\Interpreter\\Interpreter\\main.py");
 
 string? line = sr.ReadLine();
 string nameFunc = "";
 int lineCount = 1;
-List<Function?> funcList = new List<Function?>();
-List<Var?> varList = new();
+List<Function?> funcList = [];
+List<Var?> varList = [];
 
 while (!sr.EndOfStream)
 {
-    string? print = new Patterns().Print;
-    string? printNumber = new Patterns().PrintNumber;
-    string? printVar = new Patterns().PrintVar;
-    string? pattern = new Patterns().Def;
-    string? execDef = new Patterns().ExecDef;
-    string? var = new Patterns().Var;
-    string? stringVar = new Patterns().StringVar;
-    
-    if (line != null && printNumber != null && print != null && printVar != null && Regex.IsMatch(line, print) | Regex.IsMatch(line, printNumber) | Regex.IsMatch(line, printVar))
+    Patterns patterns = new();
+
+    if (line != null && patterns.PrintNumber != null
+    && patterns.Print != null && patterns.PrintVar != null
+    && Regex.IsMatch(line, patterns.Print)
+    | Regex.IsMatch(line, patterns.PrintNumber)
+    | Regex.IsMatch(line, patterns.PrintVar))
     {
         if (nameFunc != "")
         {
@@ -34,7 +32,9 @@ while (!sr.EndOfStream)
         line = sr.ReadLine();
         lineCount++;
     }
-    else if (line != null && pattern != null && Regex.IsMatch(line, pattern))
+    else if (line != null
+    && patterns.Def != null
+    && Regex.IsMatch(line, patterns.Def))
     {
         Mapper map = new();
         nameFunc = map.Def(line);
@@ -43,9 +43,12 @@ while (!sr.EndOfStream)
         line = sr.ReadLine();
         lineCount++;
     }
-    else if (line != null && execDef != null && Regex.IsMatch(line, execDef))
-    {   
-        if(nameFunc != ""){
+    else if (line != null
+    && patterns.ExecDef != null
+    && Regex.IsMatch(line, patterns.ExecDef))
+    {
+        if (nameFunc != "")
+        {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line);
             line = sr.ReadLine();
@@ -54,8 +57,8 @@ while (!sr.EndOfStream)
         }
         var name = line.Split("(");
         Function? func = funcList.Find(obj => obj?.Nome == name[0]);
-        
-        if ( func != null)
+
+        if (func != null)
         {
             new Recursion().DefRecursion(func, funcList, lineCount, ref varList);
             line = sr.ReadLine();
@@ -67,15 +70,17 @@ while (!sr.EndOfStream)
             break;
         }
     }
-    else if(line == "" | string.IsNullOrWhiteSpace(line))
-    {   
+    else if (line == "" | string.IsNullOrWhiteSpace(line))
+    {
         line = sr.ReadLine();
         nameFunc = "";
         lineCount++;
     }
-    else if (line.Contains("="))
+    else if (line != null 
+    && line.Contains('='))
     {
-        if(nameFunc != ""){
+        if (nameFunc != "")
+        {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line.Trim());
             line = sr.ReadLine();
@@ -87,7 +92,7 @@ while (!sr.EndOfStream)
         dynamic value = map.VarValue(line);
 
         Var? variable = varList.Find(obj => obj?.Nome == name);
-                    
+
         if (variable != null)
         {
             variable.Value = value;
@@ -95,7 +100,7 @@ while (!sr.EndOfStream)
             lineCount++;
             continue;
         }
-                    
+
         Var newVariable = new(name, value);
         varList.Add(newVariable);
         line = sr.ReadLine();
