@@ -1,6 +1,6 @@
 ﻿namespace Interpreter.utils;
 
-public class Function(string nome)
+public record Function(string nome)
 {
     private List<string> _listOfMembers = new();
     private List<Var?> _funcVars = new();

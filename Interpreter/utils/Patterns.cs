@@ -2,6 +2,7 @@
 
 public class Patterns
 {
+    public string Tab => @"^    ";
     public string Def => @"^def\s+\w+\s*\(\s*((\w+\s*,\s*)*\w*)?\s*\):\s*$";
     public string DefPrint => @"^    print\(""+[^""]+""\)$";
     public string DefPrintVar => @"^    print\(+[^""]+\)$";
