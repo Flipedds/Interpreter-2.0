@@ -6,11 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
-    <ItemGroup>
-      <None Remove="language.py" />
-    </ItemGroup>
-
     <ItemGroup>
       <PackageReference Include="StringEnum" Version="0.1.0" />
     </ItemGroup>
