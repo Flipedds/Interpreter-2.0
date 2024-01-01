@@ -146,6 +146,5 @@ while (!sr.EndOfStream)
 
 /*
  * todo
- * variáveis de escopo de função
  * lambda funcs
  */
