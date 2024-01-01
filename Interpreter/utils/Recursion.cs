@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Interpreter.mappers;
+namespace Interpreter.utils;
 
 public class Recursion
 {

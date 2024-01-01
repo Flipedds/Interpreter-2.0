@@ -1,4 +1,4 @@
-﻿namespace Interpreter.mappers;
+﻿namespace Interpreter.utils;
 
 public class Patterns
 {
