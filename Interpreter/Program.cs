@@ -1,8 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Interpreter.mappers;
 
-string[] arguments = Environment.GetCommandLineArgs();
-
 StreamReader sr = new(args[0]);
 
 string? line = sr.ReadLine();
