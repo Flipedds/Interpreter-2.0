@@ -1,7 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using Interpreter.mappers;
 
-StreamReader sr = new("C:\\Users\\felip\\RiderProjects\\Interpreter\\Interpreter\\main.py");
+string[] arguments = Environment.GetCommandLineArgs();
+
+StreamReader sr = new(args[0]);
 
 string? line = sr.ReadLine();
 string nameFunc = "";
