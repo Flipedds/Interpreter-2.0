@@ -1,10 +1,9 @@
 ﻿namespace Interpreter.utils;
 
-public record Function(string nome)
+public record Function(string Nome)
 {
-    private List<string> _listOfMembers = new();
-    private List<Var?> _funcVars = new();
-    public string Nome { get;} = nome;
+    private List<string> _listOfMembers = [];
+    private List<Var?> _funcVars = [];
 
     public void NewVar(Var var)
     {
