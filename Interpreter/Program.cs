@@ -5,6 +5,7 @@ StreamReader sr = new(args[0]);
 
 string? line = sr.ReadLine();
 string nameFunc = "";
+int lineFunc = 0;
 int lineCount = 1;
 List<Function?> funcList = [];
 List<Var?> varList = [];
@@ -18,7 +19,10 @@ while (!sr.EndOfStream)
     | Regex.IsMatch(line, patterns.PrintNumber)
     | Regex.IsMatch(line, patterns.PrintVar))
     {
-        if (nameFunc != "")
+        if (nameFunc != ""
+        && Regex.IsMatch(line, patterns.DefPrint)
+        | Regex.IsMatch(line, patterns.DefPrintNumber)
+        | Regex.IsMatch(line, patterns.DefPrintVar))
         {
             Function? func = funcList.Find(obj => obj?.Nome == nameFunc);
             func?.Add(line);
@@ -26,6 +30,16 @@ while (!sr.EndOfStream)
             lineCount++;
             continue;
         }
+        else if(nameFunc != ""
+        && !Regex.IsMatch(line, patterns.DefPrint)
+        | !Regex.IsMatch(line, patterns.DefPrintNumber)
+        | !Regex.IsMatch(line, patterns.DefPrintVar)
+        )
+        {
+            Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
+            break;
+        }
+        
         Mapper map = new();
         map.Print(line, lineCount, ref varList);
         line = sr.ReadLine();
@@ -36,6 +50,7 @@ while (!sr.EndOfStream)
     {
         Mapper map = new();
         nameFunc = map.Def(line);
+        lineFunc = lineCount;
         Function? func = new(nameFunc);
         funcList.Add(func);
         line = sr.ReadLine();
@@ -44,13 +59,20 @@ while (!sr.EndOfStream)
     else if (line != null
     && Regex.IsMatch(line, patterns.ExecDef))
     {
-        if (nameFunc != "")
+        if (nameFunc != ""
+        && Regex.IsMatch(line, patterns.DefExecDef))
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line);
             line = sr.ReadLine();
             lineCount++;
             continue;
+        }
+        else if(nameFunc != ""
+        && !Regex.IsMatch(line, patterns.DefExecDef))
+        {
+            Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
+            break;
         }
         var name = line.Split("(");
         Function? func = funcList.Find(obj => obj?.Nome == name[0]);
@@ -63,7 +85,7 @@ while (!sr.EndOfStream)
         }
         else
         {
-            Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. Função {name[0]} não foi encontrada!");
+            Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount}. Função {name[0]} não foi encontrada!");
             break;
         }
     }
@@ -71,18 +93,28 @@ while (!sr.EndOfStream)
     {
         line = sr.ReadLine();
         nameFunc = "";
+        lineFunc = 0;
         lineCount++;
     }
     else if (line != null 
     && line.Contains('='))
     {
-        if (nameFunc != "")
+        if (nameFunc != ""
+        && Regex.IsMatch(line, patterns.DefVar)
+        |  Regex.IsMatch(line, patterns.DefStringVar))
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line.Trim());
             line = sr.ReadLine();
             lineCount++;
             continue;
+        }
+        else if(nameFunc != ""
+        && !Regex.IsMatch(line, patterns.DefVar)
+        |  !Regex.IsMatch(line, patterns.DefStringVar))
+        {
+            Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
+            break;
         }
         Mapper map = new();
         string name = map.VarName(line);
@@ -105,7 +137,7 @@ while (!sr.EndOfStream)
     }
     else
     {
-        Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}");
+        Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount}");
         break;
     }
 }
