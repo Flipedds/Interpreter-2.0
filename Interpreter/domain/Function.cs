@@ -1,4 +1,4 @@
-﻿namespace Interpreter.utils;
+﻿namespace Interpreter.domain;
 
 public record Function(string Nome)
 {

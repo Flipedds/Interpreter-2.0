@@ -1,4 +1,4 @@
-﻿namespace Interpreter.utils;
+﻿namespace Interpreter.domain;
 
 public class Var(string nome, dynamic value)
 {
