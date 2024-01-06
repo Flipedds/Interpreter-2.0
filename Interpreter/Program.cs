@@ -4,14 +4,10 @@ using Interpreter.domain;
 using Interpreter.services;
 
 StreamReader sr = new(args[0]);
-
 string? line = sr.ReadLine();
-string nameFunc = "";
-int lineFunc = 0;
-int lineCount = 1;
-List<Function?> funcList = [];
-List<Var?> varList = [];
+Repository repo = new();
 Patterns patterns = new();
+
 while (!sr.EndOfStream)
 {
     if (line != null
@@ -20,41 +16,42 @@ while (!sr.EndOfStream)
     | Regex.IsMatch(line, patterns.PrintVar))
     {
         ValidationService.PrintValidation(
-            patterns, ref line, ref lineCount, 
-            ref funcList, ref varList, nameFunc, ref sr,
-            lineFunc);
+            patterns, ref line, ref repo.LineCount, 
+            ref repo.FuncList, ref repo.VarList, repo.NameFunc, ref sr,
+            repo.LineFunc);
     }
     else if (line != null
     && Regex.IsMatch(line, patterns.Def))
     {
         ValidationService.DefValidation(
-            ref line, ref funcList, ref nameFunc, 
-            ref lineFunc, ref lineCount, ref sr);
+            ref line, ref repo.FuncList, ref repo.NameFunc, 
+            ref repo.LineFunc, ref repo.LineCount, ref sr);
     }
     else if (line != null
     && Regex.IsMatch(line, patterns.ExecDef))
     {
         ValidationService.ExecDefValidation(
-            patterns, ref line, ref funcList, 
-            ref lineCount, nameFunc, ref sr, ref varList, lineFunc);
+            patterns, ref line, ref repo.FuncList, 
+            ref repo.LineCount, repo.NameFunc, ref sr, 
+            ref repo.VarList, repo.LineFunc);
     }
     else if (line == "" | string.IsNullOrWhiteSpace(line))
     {
         ValidationService.IsNullOrWhiteSpaceValidation(
-            ref line, ref nameFunc, 
-            ref lineFunc, ref lineCount, ref sr);
+            ref line, ref repo.NameFunc, 
+            ref repo.LineFunc, ref repo.LineCount, ref sr);
     }
     else if (line != null
     && line.Contains('='))
     {
         ValidationService.VarValidation(
-            nameFunc, patterns, ref line, 
-            ref funcList, ref lineCount, ref varList, ref sr,
-            lineFunc);
+            repo.NameFunc, patterns, ref line, 
+            ref repo.FuncList, ref repo.LineCount, ref repo.VarList, ref sr,
+            repo.LineFunc);
     }
     else
     {
-        Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount}");
+        Console.WriteLine($"Erro: não foi possível interpretar a linha {repo.LineCount}");
         break;
     }
 }
