@@ -33,8 +33,7 @@ public static void PrintValidation(
     | !Regex.IsMatch(line, patterns.DefPrintVar)
     )
     {
-        Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
-        Environment.Exit(0);
+        throw new InvalidOperationException($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
     }
 
     Mapper map = new();
@@ -73,8 +72,7 @@ public static void ExecDefValidation(
     else if (nameFunc != ""
     && !Regex.IsMatch(line, patterns.DefExecDef))
     {
-        Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
-        Environment.Exit(0);
+        throw new InvalidOperationException($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
     }
     var name = line.Split("(");
     Function? func = funcList.Find(obj => obj?.Nome == name[0]);
@@ -87,8 +85,7 @@ public static void ExecDefValidation(
     }
     else
     {
-        Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount}. Função {name[0]} não foi encontrada!");
-        Environment.Exit(0);
+        throw new InvalidOperationException($"Erro: não foi possível interpretar a linha {lineCount}. Função {name[0]} não foi encontrada!");
     }
 }
 
@@ -121,8 +118,7 @@ public static void VarValidation(
         && !Regex.IsMatch(line, patterns.DefVar)
         | !Regex.IsMatch(line, patterns.DefStringVar))
         {
-            Console.WriteLine($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
-            Environment.Exit(0);
+            throw new InvalidOperationException($"Erro: não foi possível interpretar a linha {lineCount} esperada uma identação depois da definição de uma função na linha {lineFunc} !");
         }
         Mapper map = new();
         string name = map.VarName(line);
