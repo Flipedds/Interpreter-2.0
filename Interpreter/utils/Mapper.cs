@@ -97,8 +97,7 @@ public class Mapper()
                 }
                 else
                 {
-                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}");
-                    Environment.Exit(0);
+                    throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}");
                 }
                 break;
         }
@@ -117,16 +116,14 @@ public class Mapper()
 
                 if (varUm == null)
                 {
-                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                    throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variável {partes[0]} não encontrada !");
-                    Environment.Exit(0);
                 }
             }
             else
             {
-                Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variável {partes[0]} não encontradas !");
-                Environment.Exit(0);
             }
 
         }
@@ -138,16 +135,14 @@ public class Mapper()
 
                 if (vardois == null)
                 {
-                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                    throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variável {partes[1]} não encontrada !");
-                    Environment.Exit(0);
                 }
             }
             else
             {
-                Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variável {partes[1]} não encontradas !");
-                Environment.Exit(0);
             }
 
         }
@@ -160,28 +155,24 @@ public class Mapper()
 
                 if (varUm == null)
                 {
-                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                    throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variável {partes[0]} não encontrada !");
-                    Environment.Exit(0);
                 }
                 else if (vardois == null)
                 {
-                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                    throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variável {partes[1]} não encontrada !");
-                    Environment.Exit(0);
                 }
                 else if (varUm == null && vardois == null)
                 {
-                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                    throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variáveis {partes[0]} {partes[1]} não encontradas !");
-                    Environment.Exit(0);
                 }
             }
             else
             {
-                Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. " +
+                throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. " +
                               $"Variáveis {partes[0]} {partes[1]} não encontradas !");
-                Environment.Exit(0);
             }
 
         }
@@ -189,9 +180,8 @@ public class Mapper()
 
         if (varUm?.Value.GetType() == typeof(int) && vardois?.Value.GetType() == typeof(string) || varUm?.Value.GetType() == typeof(string) && vardois?.Value.GetType() == typeof(int))
         {
-            Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}." +
+            throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}." +
                               $" Coerção de tipos entre inteiro e string");
-            Environment.Exit(0);
         }
 
         return (varUm, vardois);
