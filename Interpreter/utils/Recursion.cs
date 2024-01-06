@@ -40,8 +40,7 @@ public class Recursion
 
                 if (funcs == null)
                 {
-                    Console.WriteLine($"Erro não foi possível interpretar a linha {lineCount}. Função {nome} não foi encontrada!!");
-                    Environment.Exit(0);
+                    throw new InvalidOperationException($"Erro não foi possível interpretar a linha {lineCount}. Função {nome} não foi encontrada!!");
                 }
                 DefRecursion(funcs, list, lineCount, ref varList);
             }
