@@ -7,7 +7,7 @@ StreamReader sr = new(args[0]);
 string? line = sr.ReadLine();
 Repository repo = new();
 Patterns patterns = new();
-
+JsonArray array = new();
 while (!sr.EndOfStream)
 {
     switch (line)
@@ -19,14 +19,14 @@ while (!sr.EndOfStream)
             ValidationService.PrintValidation(
                 patterns, ref line, ref repo.LineCount,
                 ref repo.FuncList, ref repo.VarList, repo.NameFunc, ref sr,
-                repo.LineFunc);
+                repo.LineFunc, ref array);
             break;
 
         case string s when s != null &&
                         Regex.IsMatch(s, patterns.Def):
             ValidationService.DefValidation(
             ref line, ref repo.FuncList, ref repo.NameFunc,
-            ref repo.LineFunc, ref repo.LineCount, ref sr);
+            ref repo.LineFunc, ref repo.LineCount, ref sr, ref array);
             break;
 
         case string s when s != null &&
@@ -56,6 +56,8 @@ while (!sr.EndOfStream)
     }
 }
 
+string jsonString = array.ArrayJson.ToString();
+Console.WriteLine(jsonString);
 
 #pragma warning disable CS8604 // Possível argumento de referência nula.
 

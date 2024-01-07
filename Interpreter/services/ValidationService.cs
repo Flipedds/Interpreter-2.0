@@ -13,7 +13,7 @@ public class ValidationService
         Patterns patterns, ref string? line,
         ref int lineCount, ref List<Function?> funcList,
         ref List<Var?> varList, string nameFunc, ref StreamReader sr,
-        int lineFunc)
+        int lineFunc, ref JsonArray array)
     {
 
         if (nameFunc != ""
@@ -23,6 +23,8 @@ public class ValidationService
         {
             Function? func = funcList.Find(obj => obj?.Nome == nameFunc);
             func?.Add(line);
+            array.AdicionarMembroAFuncaoDoArray(
+                nameFunc, "def", line, lineCount, "print");
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -43,19 +45,22 @@ public class ValidationService
         }
         Mapper map = new();
         map.Print(line, lineCount, ref varList);
+        array.AdicionarPrintAoArray(line, lineCount);
         line = sr.ReadLine();
         lineCount++;
     }
 
     public static void DefValidation(ref string? line,
         ref List<Function?> funcList, ref string nameFunc,
-        ref int lineFunc, ref int lineCount, ref StreamReader sr)
+        ref int lineFunc, ref int lineCount, ref StreamReader sr,
+        ref JsonArray array)
     {
         Mapper map = new();
         nameFunc = map.Def(line);
         lineFunc = lineCount;
         Function? func = new(nameFunc);
         funcList.Add(func);
+        array.AdicionarFuncaoAoArray(nameFunc, lineFunc);
         line = sr.ReadLine();
         lineCount++;
     }
