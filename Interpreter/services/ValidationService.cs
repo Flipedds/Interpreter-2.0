@@ -13,9 +13,8 @@ public class ValidationService
         Patterns patterns, ref string? line,
         ref int lineCount, ref List<Function?> funcList,
         ref List<Var?> varList, string nameFunc, ref StreamReader sr,
-        int lineFunc)
+        int lineFunc, ref JsonArray array)
     {
-
         if (nameFunc != ""
             && Regex.IsMatch(line, patterns.DefPrint)
             | Regex.IsMatch(line, patterns.DefPrintNumber)
@@ -23,6 +22,8 @@ public class ValidationService
         {
             Function? func = funcList.Find(obj => obj?.Nome == nameFunc);
             func?.Add(line);
+            array.AdicionarMembroAFuncaoDoArray(
+                nameFunc, "def", ObjectJson.Print(line, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -43,19 +44,22 @@ public class ValidationService
         }
         Mapper map = new();
         map.Print(line, lineCount, ref varList);
+        array.AdicionarAoArray(ObjectJson.Print(line, lineCount));
         line = sr.ReadLine();
         lineCount++;
     }
 
     public static void DefValidation(ref string? line,
         ref List<Function?> funcList, ref string nameFunc,
-        ref int lineFunc, ref int lineCount, ref StreamReader sr)
+        ref int lineFunc, ref int lineCount, ref StreamReader sr,
+        ref JsonArray array)
     {
         Mapper map = new();
         nameFunc = map.Def(line);
         lineFunc = lineCount;
         Function? func = new(nameFunc);
         funcList.Add(func);
+        array.AdicionarAoArray(ObjectJson.Funcao(nameFunc, lineFunc));
         line = sr.ReadLine();
         lineCount++;
     }
@@ -63,13 +67,16 @@ public class ValidationService
     public static void ExecDefValidation(
         Patterns patterns, ref string? line,
         ref List<Function?> funcList, ref int lineCount, string nameFunc,
-        ref StreamReader sr, ref List<Var?> varList, int lineFunc)
+        ref StreamReader sr, ref List<Var?> varList, int lineFunc,
+        ref JsonArray array)
     {
         if (nameFunc != ""
             && Regex.IsMatch(line, patterns.DefExecDef))
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line);
+            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def",
+            ObjectJson.ExecDef(nameFunc, line, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -90,6 +97,8 @@ public class ValidationService
 
         if (func != null)
         {
+            array.AdicionarAoArray(
+                ObjectJson.ExecDef(name[0], line, lineCount));
             new Recursion().DefRecursion(func, funcList, lineCount, ref varList);
             line = sr.ReadLine();
             lineCount++;
@@ -111,14 +120,21 @@ public class ValidationService
     public static void VarValidation(
         string nameFunc, Patterns patterns, ref string? line,
         ref List<Function?> funcList, ref int lineCount,
-        ref List<Var?> varList, ref StreamReader sr, int lineFunc)
+        ref List<Var?> varList, ref StreamReader sr, int lineFunc,
+        ref JsonArray array)
     {
+        Mapper map = new();
+        string name = map.VarName(line);
+        dynamic value = map.VarValue(line);
+
         if (nameFunc != ""
             && Regex.IsMatch(line, patterns.DefVar)
             | Regex.IsMatch(line, patterns.DefStringVar))
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line.Trim());
+            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def",
+            ObjectJson.Var(line, name, value, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -135,9 +151,6 @@ public class ValidationService
                 lineFunc = 0;
             }
         }
-        Mapper map = new();
-        string name = map.VarName(line);
-        dynamic value = map.VarValue(line);
 
         Var? variable = varList.Find(obj => obj?.Nome == name);
 
@@ -151,6 +164,8 @@ public class ValidationService
 
         Var newVariable = new(name, value);
         varList.Add(newVariable);
+        array.AdicionarAoArray(
+            ObjectJson.Var(line, name, value, lineCount));
         line = sr.ReadLine();
         lineCount++;
     }

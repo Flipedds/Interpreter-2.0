@@ -3,11 +3,14 @@ using Interpreter.utils;
 using Interpreter.domain;
 using Interpreter.services;
 
+string caminhoDoArquivo = "parsed.json";
+File.WriteAllText(caminhoDoArquivo, string.Empty);
+
 StreamReader sr = new(args[0]);
 string? line = sr.ReadLine();
 Repository repo = new();
 Patterns patterns = new();
-
+JsonArray array = new();
 while (!sr.EndOfStream)
 {
     switch (line)
@@ -19,14 +22,14 @@ while (!sr.EndOfStream)
             ValidationService.PrintValidation(
                 patterns, ref line, ref repo.LineCount,
                 ref repo.FuncList, ref repo.VarList, repo.NameFunc, ref sr,
-                repo.LineFunc);
+                repo.LineFunc, ref array);
             break;
 
         case string s when s != null &&
                         Regex.IsMatch(s, patterns.Def):
             ValidationService.DefValidation(
             ref line, ref repo.FuncList, ref repo.NameFunc,
-            ref repo.LineFunc, ref repo.LineCount, ref sr);
+            ref repo.LineFunc, ref repo.LineCount, ref sr, ref array);
             break;
 
         case string s when s != null &&
@@ -34,7 +37,7 @@ while (!sr.EndOfStream)
             ValidationService.ExecDefValidation(
             patterns, ref line, ref repo.FuncList,
             ref repo.LineCount, repo.NameFunc, ref sr,
-            ref repo.VarList, repo.LineFunc);
+            ref repo.VarList, repo.LineFunc, ref array);
             break;
 
         case string s when s == "" ||
@@ -48,16 +51,15 @@ while (!sr.EndOfStream)
             ValidationService.VarValidation(
             repo.NameFunc, patterns, ref line,
             ref repo.FuncList, ref repo.LineCount, ref repo.VarList, ref sr,
-            repo.LineFunc);
+            repo.LineFunc, ref array);
             break;
 
         default:
             throw new InvalidOperationException($"Erro: não foi possível interpretar a linha {repo.LineCount}");
     }
 }
-
-
-#pragma warning disable CS8604 // Possível argumento de referência nula.
+string jsonString = array.ArrayJson.ToString();
+File.WriteAllText(caminhoDoArquivo, jsonString);
 
 /*
  * todo
