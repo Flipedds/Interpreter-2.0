@@ -1,6 +1,7 @@
 using Interpreter.utils;
 using Interpreter.domain;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 
 namespace Interpreter.services;
 
@@ -15,7 +16,6 @@ public class ValidationService
         ref List<Var?> varList, string nameFunc, ref StreamReader sr,
         int lineFunc, ref JsonArray array)
     {
-
         if (nameFunc != ""
             && Regex.IsMatch(line, patterns.DefPrint)
             | Regex.IsMatch(line, patterns.DefPrintNumber)
@@ -23,8 +23,13 @@ public class ValidationService
         {
             Function? func = funcList.Find(obj => obj?.Nome == nameFunc);
             func?.Add(line);
+            JObject objeto = new(){
+                { "Tipo", "print" },
+                { "linha", line },
+                { "posicao", lineCount }
+            };
             array.AdicionarMembroAFuncaoDoArray(
-                nameFunc, "def", line, lineCount, "print");
+                nameFunc, "def", objeto);
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -68,13 +73,22 @@ public class ValidationService
     public static void ExecDefValidation(
         Patterns patterns, ref string? line,
         ref List<Function?> funcList, ref int lineCount, string nameFunc,
-        ref StreamReader sr, ref List<Var?> varList, int lineFunc)
+        ref StreamReader sr, ref List<Var?> varList, int lineFunc,
+        ref JsonArray array)
     {
         if (nameFunc != ""
             && Regex.IsMatch(line, patterns.DefExecDef))
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line);
+            JObject objeto = new()
+        {
+            { "Tipo", "execDef" },
+            { "Nome", nameFunc },
+            { "linha", line },
+            { "posicao", lineCount }
+        };
+            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def", objeto);
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -95,6 +109,7 @@ public class ValidationService
 
         if (func != null)
         {
+            array.AdicionarExecDefAoArray(nameFunc, line, lineCount);
             new Recursion().DefRecursion(func, funcList, lineCount, ref varList);
             line = sr.ReadLine();
             lineCount++;
@@ -116,14 +131,26 @@ public class ValidationService
     public static void VarValidation(
         string nameFunc, Patterns patterns, ref string? line,
         ref List<Function?> funcList, ref int lineCount,
-        ref List<Var?> varList, ref StreamReader sr, int lineFunc)
+        ref List<Var?> varList, ref StreamReader sr, int lineFunc,
+        ref JsonArray array)
     {
+        Mapper map = new();
+        string name = map.VarName(line);
+        dynamic value = map.VarValue(line);
+
         if (nameFunc != ""
             && Regex.IsMatch(line, patterns.DefVar)
             | Regex.IsMatch(line, patterns.DefStringVar))
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line.Trim());
+            JObject objeto = new(){
+            { "Tipo", "var" },
+            { "Nome", name },
+            { "Valor", value },
+            { "linha", line },
+            { "posicao", lineCount }};
+            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def", objeto);
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -140,9 +167,6 @@ public class ValidationService
                 lineFunc = 0;
             }
         }
-        Mapper map = new();
-        string name = map.VarName(line);
-        dynamic value = map.VarValue(line);
 
         Var? variable = varList.Find(obj => obj?.Nome == name);
 
@@ -156,6 +180,7 @@ public class ValidationService
 
         Var newVariable = new(name, value);
         varList.Add(newVariable);
+        array.AdicionarVarAoArray(line, name, value, lineCount);
         line = sr.ReadLine();
         lineCount++;
     }

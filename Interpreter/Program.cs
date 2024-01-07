@@ -34,7 +34,7 @@ while (!sr.EndOfStream)
             ValidationService.ExecDefValidation(
             patterns, ref line, ref repo.FuncList,
             ref repo.LineCount, repo.NameFunc, ref sr,
-            ref repo.VarList, repo.LineFunc);
+            ref repo.VarList, repo.LineFunc, ref array);
             break;
 
         case string s when s == "" ||
@@ -48,7 +48,7 @@ while (!sr.EndOfStream)
             ValidationService.VarValidation(
             repo.NameFunc, patterns, ref line,
             ref repo.FuncList, ref repo.LineCount, ref repo.VarList, ref sr,
-            repo.LineFunc);
+            repo.LineFunc, ref array);
             break;
 
         default:

@@ -26,7 +26,7 @@ public class JsonArray
 
     public void AdicionarMembroAFuncaoDoArray(
         string nameFunc, string type,
-        string line, int lineCount, string memberType)
+        JObject objeto)
     {
         JObject objetoEncontrado = [];
         foreach (JObject item in ArrayJson.Children<JObject>())
@@ -41,16 +41,7 @@ public class JsonArray
         if (objetoEncontrado != null)
         {
             JArray membersArray = (JArray)objetoEncontrado["members"];
-            if(memberType == "print")
-            {
-                JObject novoItem = new()
-            {
-                { "Tipo", "print" },
-                { "linha", line },
-                { "posicao", lineCount }
-            };
-                membersArray.Add(novoItem);
-            }
+            membersArray.Add(objeto); 
         }
     }
 
@@ -59,6 +50,33 @@ public class JsonArray
         JObject objeto = new()
         {
             { "Tipo", "print" },
+            { "linha", line },
+            { "posicao", lineCount }
+        };
+
+        ArrayJson.Add(objeto);
+    }
+
+    public void AdicionarVarAoArray(string line, string name, dynamic value, int lineCount)
+    {
+        JObject objeto = new()
+        {
+            { "Tipo", "var" },
+            { "Nome", name },
+            { "Valor", value },
+            { "linha", line },
+            { "posicao", lineCount }
+        };
+
+        ArrayJson.Add(objeto);
+    }
+
+    public void AdicionarExecDefAoArray(
+        string funcName, string line, int lineCount){
+        JObject objeto = new()
+        {
+            { "Tipo", "execDef" },
+            { "Nome", funcName },
             { "linha", line },
             { "posicao", lineCount }
         };
