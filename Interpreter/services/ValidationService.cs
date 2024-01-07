@@ -1,7 +1,6 @@
 using Interpreter.utils;
 using Interpreter.domain;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
 
 namespace Interpreter.services;
 
@@ -23,13 +22,8 @@ public class ValidationService
         {
             Function? func = funcList.Find(obj => obj?.Nome == nameFunc);
             func?.Add(line);
-            JObject objeto = new(){
-                { "Tipo", "print" },
-                { "linha", line },
-                { "posicao", lineCount }
-            };
             array.AdicionarMembroAFuncaoDoArray(
-                nameFunc, "def", objeto);
+                nameFunc, "def", array.AdicionarPrint(line, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -50,7 +44,7 @@ public class ValidationService
         }
         Mapper map = new();
         map.Print(line, lineCount, ref varList);
-        array.AdicionarPrintAoArray(line, lineCount);
+        array.AdicionarAoArray(array.AdicionarPrint(line, lineCount));
         line = sr.ReadLine();
         lineCount++;
     }
@@ -65,7 +59,7 @@ public class ValidationService
         lineFunc = lineCount;
         Function? func = new(nameFunc);
         funcList.Add(func);
-        array.AdicionarFuncaoAoArray(nameFunc, lineFunc);
+        array.AdicionarAoArray(array.AdicionarFuncao(nameFunc, lineFunc));
         line = sr.ReadLine();
         lineCount++;
     }
@@ -81,14 +75,8 @@ public class ValidationService
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line);
-            JObject objeto = new()
-        {
-            { "Tipo", "execDef" },
-            { "Nome", nameFunc },
-            { "linha", line },
-            { "posicao", lineCount }
-        };
-            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def", objeto);
+            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def",
+            array.AdicionarExecDef(nameFunc, line, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -109,7 +97,8 @@ public class ValidationService
 
         if (func != null)
         {
-            array.AdicionarExecDefAoArray(nameFunc, line, lineCount);
+            array.AdicionarAoArray(
+                array.AdicionarExecDef(nameFunc, line, lineCount));
             new Recursion().DefRecursion(func, funcList, lineCount, ref varList);
             line = sr.ReadLine();
             lineCount++;
@@ -144,13 +133,8 @@ public class ValidationService
         {
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line.Trim());
-            JObject objeto = new(){
-            { "Tipo", "var" },
-            { "Nome", name },
-            { "Valor", value },
-            { "linha", line },
-            { "posicao", lineCount }};
-            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def", objeto);
+            array.AdicionarMembroAFuncaoDoArray(nameFunc, "def",
+            array.AdicionarVar(line, name, value, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -180,7 +164,8 @@ public class ValidationService
 
         Var newVariable = new(name, value);
         varList.Add(newVariable);
-        array.AdicionarVarAoArray(line, name, value, lineCount);
+        array.AdicionarAoArray(
+            array.AdicionarVar(line, name, value, lineCount));
         line = sr.ReadLine();
         lineCount++;
     }
