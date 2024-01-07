@@ -3,6 +3,9 @@ using Interpreter.utils;
 using Interpreter.domain;
 using Interpreter.services;
 
+string caminhoDoArquivo = "parsed.json";
+File.WriteAllText(caminhoDoArquivo, string.Empty);
+
 StreamReader sr = new(args[0]);
 string? line = sr.ReadLine();
 Repository repo = new();
@@ -56,7 +59,6 @@ while (!sr.EndOfStream)
     }
 }
 string jsonString = array.ArrayJson.ToString();
-string caminhoDoArquivo = "parsed.json";
 File.WriteAllText(caminhoDoArquivo, jsonString);
 
 /*
