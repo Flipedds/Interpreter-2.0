@@ -1,0 +1,135 @@
+[
+  {
+    "Tipo": "print",
+    "linha": "print(\"Testando funções em python\")",
+    "posicao": 1
+  },
+  {
+    "Tipo": "var",
+    "Nome": "valorUm",
+    "Valor": 3,
+    "linha": "valorUm = 3",
+    "posicao": 3
+  },
+  {
+    "Tipo": "var",
+    "Nome": "valorDois",
+    "Valor": 3,
+    "linha": "valorDois = 3",
+    "posicao": 4
+  },
+  {
+    "Tipo": "print",
+    "linha": "print(valorUm/valorDois)",
+    "posicao": 6
+  },
+  {
+    "Tipo": "def",
+    "Nome": "soma",
+    "linha": 8,
+    "membros": [
+      {
+        "Tipo": "var",
+        "Nome": "valorTres",
+        "Valor": 4,
+        "linha": "    valorTres = 4",
+        "posicao": 9
+      },
+      {
+        "Tipo": "var",
+        "Nome": "valorQuatro",
+        "Valor": 4,
+        "linha": "    valorQuatro = 4",
+        "posicao": 10
+      },
+      {
+        "Tipo": "var",
+        "Nome": "msg",
+        "Valor": "oi",
+        "linha": "    msg = \"oi\"",
+        "posicao": 11
+      },
+      {
+        "Tipo": "print",
+        "linha": "    print(msg)",
+        "posicao": 12
+      },
+      {
+        "Tipo": "print",
+        "linha": "    print(valorTres*valorQuatro)",
+        "posicao": 13
+      }
+    ]
+  },
+  {
+    "Tipo": "def",
+    "Nome": "recursao",
+    "linha": 16,
+    "membros": [
+      {
+        "Tipo": "print",
+        "linha": "    print(\"Como vai ?\")",
+        "posicao": 17
+      }
+    ]
+  },
+  {
+    "Tipo": "def",
+    "Nome": "hello",
+    "linha": 20,
+    "membros": [
+      {
+        "Tipo": "print",
+        "linha": "    print(\"Hello World!\")",
+        "posicao": 21
+      },
+      {
+        "Tipo": "execDef",
+        "Nome da funcao": "hello",
+        "linha": "    recursao()",
+        "posicao": 22
+      }
+    ]
+  },
+  {
+    "Tipo": "def",
+    "Nome": "teste",
+    "linha": 25,
+    "membros": [
+      {
+        "Tipo": "print",
+        "linha": "    print(\"Olá!\")",
+        "posicao": 26
+      },
+      {
+        "Tipo": "execDef",
+        "Nome da funcao": "teste",
+        "linha": "    hello()",
+        "posicao": 27
+      },
+      {
+        "Tipo": "print",
+        "linha": "    print(\"Até mais\")",
+        "posicao": 28
+      }
+    ]
+  },
+  {
+    "Tipo": "execDef",
+    "Nome da funcao": "teste",
+    "linha": "teste()",
+    "posicao": 30
+  },
+  {
+    "Tipo": "execDef",
+    "Nome da funcao": "soma",
+    "linha": "soma()",
+    "posicao": 31
+  },
+  {
+    "Tipo": "execDef",
+    "Nome da funcao": "soma",
+    "linha": "soma()",
+    "posicao": 32
+  }
+]

@@ -55,11 +55,9 @@ while (!sr.EndOfStream)
             throw new InvalidOperationException($"Erro: não foi possível interpretar a linha {repo.LineCount}");
     }
 }
-
 string jsonString = array.ArrayJson.ToString();
-Console.WriteLine(jsonString);
-
-#pragma warning disable CS8604 // Possível argumento de referência nula.
+string caminhoDoArquivo = "parsed.json";
+File.WriteAllText(caminhoDoArquivo, jsonString);
 
 /*
  * todo
