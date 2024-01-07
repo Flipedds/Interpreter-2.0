@@ -40,8 +40,7 @@ while (!sr.EndOfStream)
         case string s when s == "" ||
                         string.IsNullOrWhiteSpace(s):
             ValidationService.IsNullOrWhiteSpaceValidation(
-            ref line, ref repo.NameFunc,
-            ref repo.LineFunc, ref repo.LineCount, ref sr);
+            ref line, ref repo.LineCount, ref sr);
             break;
 
         case string s when s != null && 

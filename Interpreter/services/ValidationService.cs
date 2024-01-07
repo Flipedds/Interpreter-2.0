@@ -101,8 +101,7 @@ public class ValidationService
     }
 
     public static void IsNullOrWhiteSpaceValidation(
-        ref string? line, ref string nameFunc,
-        ref int lineFunc, ref int lineCount, ref StreamReader sr
+        ref string? line, ref int lineCount, ref StreamReader sr
     )
     {
         line = sr.ReadLine();
