@@ -23,7 +23,7 @@ public class ValidationService
             Function? func = funcList.Find(obj => obj?.Nome == nameFunc);
             func?.Add(line);
             array.AdicionarMembroAFuncaoDoArray(
-                nameFunc, "def", array.AdicionarPrint(line, lineCount));
+                nameFunc, "def", ObjectJson.Print(line, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -44,7 +44,7 @@ public class ValidationService
         }
         Mapper map = new();
         map.Print(line, lineCount, ref varList);
-        array.AdicionarAoArray(array.AdicionarPrint(line, lineCount));
+        array.AdicionarAoArray(ObjectJson.Print(line, lineCount));
         line = sr.ReadLine();
         lineCount++;
     }
@@ -59,7 +59,7 @@ public class ValidationService
         lineFunc = lineCount;
         Function? func = new(nameFunc);
         funcList.Add(func);
-        array.AdicionarAoArray(array.AdicionarFuncao(nameFunc, lineFunc));
+        array.AdicionarAoArray(ObjectJson.Funcao(nameFunc, lineFunc));
         line = sr.ReadLine();
         lineCount++;
     }
@@ -76,7 +76,7 @@ public class ValidationService
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line);
             array.AdicionarMembroAFuncaoDoArray(nameFunc, "def",
-            array.AdicionarExecDef(nameFunc, line, lineCount));
+            ObjectJson.ExecDef(nameFunc, line, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -98,7 +98,7 @@ public class ValidationService
         if (func != null)
         {
             array.AdicionarAoArray(
-                array.AdicionarExecDef(nameFunc, line, lineCount));
+                ObjectJson.ExecDef(name[0], line, lineCount));
             new Recursion().DefRecursion(func, funcList, lineCount, ref varList);
             line = sr.ReadLine();
             lineCount++;
@@ -134,7 +134,7 @@ public class ValidationService
             Function? funcs = funcList.Find(obj => obj?.Nome == nameFunc);
             funcs?.Add(line.Trim());
             array.AdicionarMembroAFuncaoDoArray(nameFunc, "def",
-            array.AdicionarVar(line, name, value, lineCount));
+            ObjectJson.Var(line, name, value, lineCount));
             line = sr.ReadLine();
             lineCount++;
             return;
@@ -165,7 +165,7 @@ public class ValidationService
         Var newVariable = new(name, value);
         varList.Add(newVariable);
         array.AdicionarAoArray(
-            array.AdicionarVar(line, name, value, lineCount));
+            ObjectJson.Var(line, name, value, lineCount));
         line = sr.ReadLine();
         lineCount++;
     }
