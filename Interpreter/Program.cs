@@ -11,6 +11,7 @@ string? line = sr.ReadLine();
 Repository repo = new();
 Patterns patterns = new();
 JsonArray array = new();
+
 while (!sr.EndOfStream)
 {
     switch (line)
